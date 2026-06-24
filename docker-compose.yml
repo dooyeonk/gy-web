@@ -1,0 +1,10 @@
+services:
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: dev
+      MYSQL_DATABASE: gy
+    ports: ["3306:3306"]
+    volumes: ["dbdata:/var/lib/mysql"]
+volumes:
+  dbdata:
