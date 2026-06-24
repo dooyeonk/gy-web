@@ -1,0 +1,35 @@
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+model Account {
+  id          Int         @id @default(autoincrement())
+  steamId     String      @unique
+  personaName String?
+  createdAt   DateTime    @default(now())
+  lastLoginAt DateTime    @updatedAt
+  characters  Character[]
+}
+
+model Character {
+  id          Int       @id @default(autoincrement())
+  accountId   Int
+  account     Account   @relation(fields: [accountId], references: [id])
+  name        String
+  level       Int       @default(1)
+  xp          Int       @default(0)
+  data        Json      @default("{}")
+  saveVersion Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  @@index([accountId])
+}
