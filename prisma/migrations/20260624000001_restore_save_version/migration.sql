@@ -1,0 +1,1 @@
+ALTER TABLE `Character` ADD COLUMN `saveVersion` INT NOT NULL DEFAULT 0;

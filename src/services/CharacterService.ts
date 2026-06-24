@@ -1,5 +1,5 @@
 import { db } from '../db';
-import { config } from '../config';
+import { MAX_CHARACTERS_PER_ACCOUNT } from '../constants';
 
 export class CharacterService {
   static async create(accountId: number, name: string) {
@@ -7,7 +7,7 @@ export class CharacterService {
       where: { accountId, deletedAt: null },
     });
 
-    if (count >= config.MAX_CHARACTERS) return null;
+    if (count >= MAX_CHARACTERS_PER_ACCOUNT) return null;
 
     return db.character.create({
       data: { accountId, name },

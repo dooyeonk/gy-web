@@ -50,5 +50,5 @@ SaveRouter.put('/characters/:id/save', async (req, res) => {
     res.status(409).json({ error: 'Save conflict: newer version already saved' });
     return;
   }
-  res.json(outcome);
+  res.json({ saveVersion: outcome.saveVersion });
 });
