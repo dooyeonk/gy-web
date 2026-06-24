@@ -4,7 +4,7 @@ import { config } from './config';
 import { AuthRouter, CharactersRouter, SaveRouter } from './routes';
 
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: '1mb' }));
 
 app.use('/auth', AuthRouter);
 app.use('/characters', CharactersRouter);
