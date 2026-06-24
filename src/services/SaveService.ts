@@ -16,20 +16,20 @@ export class SaveService {
     gameData: Prisma.InputJsonValue,
     expectedVersion: number,
   ) {
-    const character = await db.character.findFirst({
-      where: { id: characterId, deletedAt: null },
-      select: { saveVersion: true },
-    });
-
-    if (!character) return { notFound: true as const };
-    if (character.saveVersion !== expectedVersion) return { conflict: true as const };
-
-    const updated = await db.character.update({
-      where: { id: characterId },
+    const result = await db.character.updateMany({
+      where: { id: characterId, deletedAt: null, saveVersion: expectedVersion },
       data: { level, xp, data: gameData, saveVersion: { increment: 1 } },
-      select: { saveVersion: true },
     });
 
-    return { saveVersion: updated.saveVersion };
+    if (result.count === 0) {
+      const exists = await db.character.findFirst({
+        where: { id: characterId, deletedAt: null },
+        select: { id: true },
+      });
+      if (!exists) return { notFound: true as const };
+      return { conflict: true as const };
+    }
+
+    return { saveVersion: expectedVersion + 1 };
   }
 }
